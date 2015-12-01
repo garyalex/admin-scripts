@@ -6,15 +6,17 @@
 
 if [ "$#" -eq 0 ];then
     echo "Proxy setter"
-    echo "Usage: $0 [ none | hostname ]"
+    echo "Usage: $0 profile"
+    echo "Current profiles: ucs ada direct"
 else
   # setup main squid file and template file
   squidconf="/etc/squid3/squid.conf"
-  if [[ "$1" -eq "none" ]]; then
-    templateconf="$squidconf.direct"
+  if [[ $1 != "ada" && $1 != "ucs" && $1 != "direct" ]]; then
+    echo "No valid profile found!"
+    exit 1
   else
-    hostname="$1"
-    templateconf="$squidconf.$hostname"
+    PROFILE="$1"
+    templateconf="$squidconf.$PROFILE"
   fi
 
   # cp template to squid conf
@@ -23,8 +25,12 @@ else
     echo "ERROR: no such file $templateconf"
     exit 1
   fi 
-  sudo cp $templateconf $squidconf
+  # PROXYHOSTNAME_FILE - where we store the hostname in use
+  PROXY_FILE='/tmp/gta-squidhost'
+  rm -rf $PROXY_FILE
+  echo "$PROFILE" > $PROXY_FILE
   
+  sudo cp $templateconf $squidconf
   sudo systemctl reload squid3.service || \
     sudo systemctl start squid3.service
   # set .wgetrc
