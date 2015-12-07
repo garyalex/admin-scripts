@@ -1,2 +1,2 @@
 - Fix ssh tunnel script for better error checking
-
+- Add local squid status check into watchproxy
