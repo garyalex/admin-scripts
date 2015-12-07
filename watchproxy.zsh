@@ -18,8 +18,6 @@ PROXY_FILE="/tmp/gta-squidhost"
 SSHTUNNEL_FILE="/tmp/gta-sshtunnel"
 SSH_HOST_FILE="/tmp/gta-sshtunnel.txt"
 
-SSH_HOST=$(cat $SSH_HOST_FILE)
-
 # Current Proxy parent
 if [ -f "$PROXY_FILE" ]
 then
@@ -28,14 +26,19 @@ else
   PROXY_PARENT="-- NOT RUNNING? --"
 fi
 
-if [ -e $SSHTUNNEL_FILE ]; then
+if [[ -f $SSHTUNNEL_FILE && -f $SSH_HOST_FILE ]]; then
+  SSH_HOST=$(cat $SSH_HOST_FILE)
   SSH_STATUS="$(ssh -S $SSHTUNNEL_FILE -O check $SSH_HOST)"
-  echo $SSH_STATUS
+  echo "SSH HOST: $SSH_HOST STATUS: $SSH_STATUS"
+else
+  SSH_HOST="none"
+  SSH_STATUS="not running"
+  echo "SSH HOST: $SSH_HOST STATUS: $SSH_STATUS"
 fi
 
 echo "PROXY WATCH" | toilet -F gay -f smblock -t
 echo
-echo "$BOLD_WHITE PROXY PROFILE - $BOLD_YELLOW $PROXY_PARENT $RESET"
+echo "$BOLD_WHITE PROXY PROFILE -$BOLD_YELLOW $PROXY_PARENT $RESET"
 echo "$BLUE=====================================$RESET"
-echo "$BOLD_CYAN SSH TUNNEL - $BOLD_GREEN $SSH_STATUS $RESET"
+echo "$BOLD_CYAN SSH TUNNEL -$BOLD_GREEN $SSH_STATUS $RESET"
 echo "$BLUE=====================================$RESET"

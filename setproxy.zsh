@@ -4,6 +4,17 @@
 # Author: Gary Alexander (https://github.com/garyalex)
 # Version: 0.0.1
 
+# Setup colors for terminal
+autoload colors
+if [[ "$terminfo[colors]" -gt 8 ]]; then
+  colors
+fi
+for COLOR in RED GREEN YELLOW BLUE MAGENTA CYAN BLACK WHITE; do
+  eval $COLOR='$fg_no_bold[${(L)COLOR}]'
+  eval BOLD_$COLOR='$fg_bold[${(L)COLOR}]'
+done
+eval RESET='$reset_color'
+
 if [ "$#" -eq 0 ];then
     echo "Proxy setter"
     echo "Usage: $0 profile"
@@ -38,12 +49,12 @@ else
   # set /etc/apt.conf
 
   # shell settings
-  HTTP_PROXY="http://garya:pw123@192.168.116.235:3000/"
-  HTTPS_PROXY="http://garya:pw123@192.168.116.235:3000/"
-  FTP_PROXY="http://garya:pw123@192.168.116.235:3000/"
-  http_proxy="http://garya:pw123@192.168.116.235:3000/"
-  https_proxy="http://garya:pw123@192.168.116.235:3000/"
-  ftp_proxy="http://garya:pw123@192.168.116.235:3000/"
+  HTTP_PROXY="http://127.0.0.1:8080/"
+  HTTPS_PROXY="http://127.0.0.1:8080/"
+  FTP_PROXY="http://127.0.0.1:8080/"
+  http_proxy="http://127.0.0.1:8080/"
+  https_proxy="http://127.0.0.1:8080/"
+  ftp_proxy="http://127.0.0.1:8080/"
   export HTTP_PROXY HTTPS_PROXY FTP_PROXY
   export http_proxy https_proxy ftp_proxy
 
