@@ -25,7 +25,7 @@ fi
 if [[ $2 == "on" && $running -eq 0 ]]; then
   # start it
   echo "Starting SSH Tunnel"
-  ssh -M -S $socketfile -Cfo ExitOnForwardFailure=yes -NL 8083:localhost:8080 $hostname
+  ssh -M -S $socketfile -Cfo ExitOnForwardFailure=yes -NL 0.0.0.0:8083:localhost:8080 $hostname
   rm $ssh_host_file
   echo $hostname > $ssh_host_file
   ssh -S $socketfile -O check $hostname

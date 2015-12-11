@@ -42,8 +42,11 @@ else
   echo "$PROFILE" > $PROXY_FILE
   
   sudo cp $templateconf $squidconf
-  sudo systemctl reload squid3.service || \
-    sudo systemctl start squid3.service
+  if [ "$2" = "-f" ]; then
+    sudo systemctl restart squid3.service
+  else
+    sudo systemctl reload squid3.service || sudo systemctl start squid3.service
+  fi
   # set .wgetrc
   # set .curlrc
   # set /etc/apt.conf
