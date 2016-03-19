@@ -17,14 +17,15 @@ read -p "Your current dir is ${PWD}. Are you sure (y / n) ?" ans
 if [ "$ans" == "y" ]
 then
   echo "Changing file onwership to $_ugperm for $_dir..."
-  sudo $_chown -R "${_ugperm}" "$_dir"
-  # If it's a script file make it executabl
-
+  sudo $_chown -R -v "${_ugperm}" "$_dir"
+  # If it's a script file make it executable
  
   echo "Setting $_fperm permission for $_dir directory...."
-  sudo $_chmod -R "${_fperm}" "$_dir"
+  sudo $_chmod -R -v  "${_fperm}" "$_dir"
  
   echo "Setting $_dperm permission for $_dir directory...."
-  sudo sh -c "$_find """$_dir""" -type d -print0 | $_xargs -0 -I {} $_chmod $_dperm {}"
+  sudo bash "$_find $_dir -type d -print0 | $_xargs -0 -I {} $_chmod $_dperm {}"
+  sudo bash "$_find $_dir -type f -name '*.sh' | $_xargs -0 -I {} $_chmod +x {}"
+  sudo bash "$_find $_dir -type f -name '*.pl' | $_xargs -0 -I {} $_chmod +x {}"
+  sudo bash "$_find $_dir -type f -name '*.py' | $_xargs -0 -I {} $_chmod +x {}"
 fi
-

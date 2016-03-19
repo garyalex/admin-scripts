@@ -1,45 +1,53 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 # Summary: set ssh tunnel using master and control sockets
 # Usage: set-proxy.zsh [ hostname | none ] 
 # Author: Gary Alexander (https://github.com/garyalex)
-# Version: 0.0.1
+# Version: 0.0.2
 
-if [ "$#" -eq 0 ];then
-  echo "SSH Tunnel setter"
-  echo "Usage: $0 hostname [ on | off ]"
-  exit 1
+function usage {
+echo "SSH Tunnel setter"
+echo "Usage: $0 hostname [ on | off ]"
+exit 1
+}
+
+if [ "$#" -eq 0 ]; then
+  usage
+fi
+
+if [[ "$1" == "" || "$2" == "" ]]; then
+  usage
 fi
   
 # variables for ssh tunnel
 hostname="$1"
+portlist="8080 10022 10080 5050"
 socketfile="/tmp/gta-sshtunnel"
-running=0
 ssh_host_file="/tmp/gta-sshtunnel.txt"
-if [ -e $socketfile ]; then
-  ssh -S $socketfile -O check $hostname
-  if [ $? -eq 0 ]; then
-    running=1
-  fi
-fi
 
-if [[ $2 == "on" && $running -eq 0 ]]; then
-  # start it
-  echo "Starting SSH Tunnel"
-  ssh -M -S $socketfile -Cfo ExitOnForwardFailure=yes -NL 0.0.0.0:8083:localhost:8080 $hostname
-  rm $ssh_host_file
-  echo $hostname > $ssh_host_file
-  ssh -S $socketfile -O check $hostname
-elif [[ $2 == "on" && $running -eq 1 ]]; then
-  # already running
-  echo "Error: already running"
-  exit 1
-elif [[ $2 == "off" && $running -eq 0 ]]; then
-  # already stopped
-  echo "Error: already stopped"
-  exit 1
-elif [[ $2 == "off" && $running -eq 1 ]]; then
-  # stop it
-  echo "Stoppimg SSH Tunnel"
-  ssh -S $socketfile -O stop $hostname
-  rm $ssh_host_file
-fi 
+case $2 in
+on)
+  for port in $portlist 
+  do
+    portsockfile="$socketfile-$port"
+    echo "Starting SSH Tunnel Host: $hostname Port: $port File: $portsockfile"
+    echo "ssh -M -S $portsockfile -Cfo ExitOnForwardFailure=yes -NL 0.0.0.0:$port:localhost:$port $hostname"
+    ssh -M -S $portsockfile -Cfo ExitOnForwardFailure=yes -NL 0.0.0.0:$port:localhost:$port $hostname
+    if [ $? -eq 0 ]; then
+      echo "Setup successful"
+    fi
+  done
+  ;;
+off)
+  for port in $portlist 
+  do
+    echo "Stoppimg SSH Tunnel Port: $port"
+    portsockfile="$socketfile-$port"
+    if [ -e $portsockfile ]; then
+      ssh -S $portsockfile -O stop $hostname
+    fi
+  done
+  ;;
+*)
+  usage
+  ;;
+esac
