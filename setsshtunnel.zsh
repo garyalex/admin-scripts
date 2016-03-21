@@ -20,7 +20,7 @@ fi
   
 # variables for ssh tunnel
 hostname="$1"
-portlist="8080 10022 10080 5050"
+portlist="8080 10022 10080 5050 8989"
 socketfile="/tmp/gta-sshtunnel"
 ssh_host_file="/tmp/gta-sshtunnel.txt"
 
