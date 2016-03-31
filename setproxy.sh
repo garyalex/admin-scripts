@@ -1,19 +1,7 @@
-#!/usr/bin/env zsh
+#!/bin/bash
 # Summary: set proxy host by using different config files for squid
-# Usage: set-proxy.zsh [ hostname | none ] 
 # Author: Gary Alexander (https://github.com/garyalex)
 # Version: 0.0.1
-
-# Setup colors for terminal
-autoload colors
-if [[ "$terminfo[colors]" -gt 8 ]]; then
-  colors
-fi
-for COLOR in RED GREEN YELLOW BLUE MAGENTA CYAN BLACK WHITE; do
-  eval $COLOR='$fg_no_bold[${(L)COLOR}]'
-  eval BOLD_$COLOR='$fg_bold[${(L)COLOR}]'
-done
-eval RESET='$reset_color'
 
 if [ "$#" -eq 0 ];then
     echo "Proxy setter"
@@ -32,7 +20,7 @@ else
 
   # cp template to squid conf
   # check if template exists
-  if [ ! -f $templateconf ]; then
+  if [ ! -f "$templateconf" ]; then
     echo "ERROR: no such file $templateconf"
     exit 1
   fi 
@@ -41,7 +29,7 @@ else
   rm -rf $PROXY_FILE
   echo "$PROFILE" > $PROXY_FILE
   
-  sudo cp $templateconf $squidconf
+  sudo cp "$templateconf" "$squidconf"
   if [ "$2" = "-f" ]; then
     sudo systemctl restart squid3.service
   else
