@@ -20,7 +20,7 @@ fi
   
 # variables for ssh tunnel
 hostname="$1"
-portlist="8080 10022 10080 5050 8989"
+portlist="8083 10022 10080 5050 8989"
 socketfile="/tmp/gta-sshtunnel"
 ssh_host_file="/tmp/gta-sshtunnel.txt"
 
@@ -30,7 +30,7 @@ on)
   do
     portsockfile="$socketfile-$port"
     echo "Starting SSH Tunnel Host: $hostname Port: $port File: $portsockfile"
-    echo "ssh -M -S $portsockfile -Cfo ExitOnForwardFailure=yes -NL 0.0.0.0:$port:localhost:$port $hostname"
+    echo "ssh -M -S $portsockfile -Cfo ExitOnForwardFailure=yes -NL 0.0.0.0:$port:localhost:8083 $hostname"
     ssh -M -S $portsockfile -Cfo ExitOnForwardFailure=yes -NL 0.0.0.0:$port:localhost:$port $hostname
     if [ $? -eq 0 ]; then
       echo "Setup successful"
