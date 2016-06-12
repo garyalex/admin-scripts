@@ -1,4 +1,5 @@
 #!/bin/bash
+# Summary: Link scripts in current directory to your local bin directory
 
 BINDIR="/home/gta/.env/bin"
 CURDIR=$(pwd)
