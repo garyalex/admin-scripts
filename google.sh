@@ -8,7 +8,7 @@ if (( $# > 0 )); then
     shift
     MESSAGE="$MESSAGE+$1"
   done
-  ARGS="$URL"+"$MESSAGE"
+  ARGS="$URL$MESSAGE"
   echo "Opening: $ARGS"
   xdg-open "$ARGS"
 else
