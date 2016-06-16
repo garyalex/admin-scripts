@@ -18,3 +18,4 @@ Collection of sysadmin and monitoring scripts
 - setsshtunnel.sh - setup ssh tunnels to servers
 - squidtail.sh - colorful squid logs
 - watchproxy.sh - watches and gets status of the proxy 
+- google.sh - search from the command line, opens in your default browser
