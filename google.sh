@@ -1,4 +1,5 @@
 #!/bin/bash
+# Author: Gary Alexander
 
 URL="https://www.google.ae/search?q="
 

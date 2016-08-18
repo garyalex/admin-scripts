@@ -1,8 +1,8 @@
 #!/bin/bash
 
 LOGS=~/logs/hotspot.log
-WLAN="wlp5s0"
-ETH0="enp9s0"
+WLAN="wlp3s0"
+ETH0="enp0s25"
 
 if [ "$#" -eq 0 ];then
         echo "AP Hotspot for phones"

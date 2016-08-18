@@ -18,5 +18,5 @@ else
   exit 1
 fi
 
-notify-send -u normal -a "$0" -t 5000 -i "$ICON" "$MESSAGE"
+notify-send -u normal -a "$0" -t 5000 -i "$ICON" gnotify "$MESSAGE"
 exit $?
