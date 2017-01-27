@@ -1,12 +1,17 @@
 #!/bin/bash
 # Summary: Link scripts in current directory to your local bin directory
 
-BINDIR="/home/gta/.env/bin"
-CURDIR=$(pwd)
+BINDIR="/usr/local/bin"
+CURDIR=$1
 FILETYPES="sh pl py rb"
 
-echo "$CURDIR"
-find ./ -maxdepth 1 -type f | sed 's/\.\///' > /tmp/linkbins 
+if [ ! -d "$CURDIR" ]; then
+  echo "Not a directory!"
+  exit 1
+fi
+
+cd "$CURDIR"
+find ./ -maxdepth 1 -type f | sed 's/\.\///' > /tmp/linkbins
 for TYPE in $FILETYPES; do
   for FILE in $(cat /tmp/linkbins); do
     if [[ $FILE =~ ^.*\.$TYPE$ ]]; then
@@ -15,3 +20,4 @@ for TYPE in $FILETYPES; do
   done
 done
 
+exit 0
